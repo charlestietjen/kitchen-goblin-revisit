@@ -1,9 +1,13 @@
-import { Schema, Types, model } from "mongoose";
+import mongoose, { Schema, Types, model, Document } from "mongoose";
 import bcrypt from "bcrypt";
 
-interface IUser {
+interface IUser extends Document {
+    _id: Types.ObjectId;
+    displayName: string;
     password: string;
+    email: string;
     organization: Types.ObjectId;
+    isCorrectPassword: Function;
 }
 
 const userSchema = new Schema({
@@ -30,7 +34,7 @@ const userSchema = new Schema({
     },
     authToken: {
         type: String,
-        require: true,
+        // require: true,
         unique: true,
     },
 })
@@ -48,4 +52,5 @@ userSchema.methods.isCorrectPassword = async function(password: string) {
     return bcrypt.compare(password, this.password);
 };
 
-export const User = model("User", userSchema);
+// export const User = model("User", userSchema);
+export const User = mongoose.model<IUser>('User', userSchema);

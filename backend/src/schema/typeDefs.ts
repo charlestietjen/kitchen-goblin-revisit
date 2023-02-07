@@ -6,10 +6,18 @@ type User{
     displayName: String!
     email: String!
     password: String!
-    authToken: String!
+    authToken: String
     avatarUrl: String
+}
+type Auth{
+    token: ID!
+    user: User
 }
 type Query{
     users: [User]
+}
+type Mutation{
+    adduser(displayName: String!, email: String!, password: String!): Auth
+    login(email: String!, password: String!) :Auth
 }
 `
