@@ -1,5 +1,5 @@
 import { GraphQLError } from 'graphql';
-import { User } from "../models"
+import { User, Recipe } from "../models"
 import { signToken } from "../utils/auth";
 
 export const resolvers = {
@@ -7,6 +7,14 @@ export const resolvers = {
         users: async() => {
             return User.find()
             .select("-__v -password");
+        },
+        recipes: async() => {
+            return Recipe.find()
+            .select("-__v")
+        },
+        recipebyid: async (_parent: any, { _id }: { _id: string} ) => {
+            return Recipe.findById(_id)
+            .select("-__v")
         }
     },
     Mutation: {
@@ -37,5 +45,9 @@ export const resolvers = {
             const token = signToken(user);
             return { token, user };
         },
+        addrecipe: async(_parent:any, args: any) => {
+            const recipe = await Recipe.create(args);
+            return recipe;
+        }
     }
 }

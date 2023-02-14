@@ -8,16 +8,52 @@ type User{
     password: String!
     authToken: String
     avatarUrl: String
+    userCreated: String
 }
+type Recipe{
+    _id: ID!
+    name: String!
+    shortDescription: String!
+    description: String
+    ingredients: [Ingredient]
+    directions: [Direction]
+    author: ID!
+    recipeCreated: String
+}
+type Ingredient{
+    name: String!
+    quantity: String!
+}
+
+input IngredientInput {
+    name: String!
+    quantity: String!
+}
+
+type Direction{
+    title: String!
+    textContent: String!
+    imageUrl: String
+}
+
+input DirectionInput {
+    title: String!
+    textContent: String!
+    imageUrl: String
+}
+
 type Auth{
     token: ID!
     user: User
 }
 type Query{
     users: [User]
+    recipes: [Recipe]
+    recipebyid(_id:ID!): Recipe
 }
 type Mutation{
     adduser(displayName: String!, email: String!, password: String!): Auth
     login(email: String!, password: String!) :Auth
+    addrecipe(name: String!, shortDescription: String!, description: String, ingredients: [IngredientInput], directions: [DirectionInput], author: ID!): Recipe
 }
 `

@@ -9,6 +9,31 @@ interface IRecipe extends Document {
     author: Types.ObjectId
 }
 
+const directionSchema = new Schema({
+    title: {
+        type: String,
+        required: true
+    },
+    textContent: {
+        type: String,
+        required: true
+    },
+    imageUrl: {
+        type: String, 
+    }
+});
+
+const ingredientSchema = new Schema({
+    name: {
+        type: String,
+        required: true,
+    },
+    quantity: {
+        type: String,
+        required: true,
+    },
+})
+
 const recipeSchema = new Schema({
     name: {
         type: String,
@@ -21,18 +46,16 @@ const recipeSchema = new Schema({
     description: {
         type: String,
     },
-    ingredients: {
-        type: Array,
-        required: true
-    },
-    directions: {
-        type: Array,
-        required: true,
-    },
+    ingredients: [ingredientSchema],
+    directions: [directionSchema],
     author: {
         type: Schema.Types.ObjectId,
         required: true
     },
+    recipeCreated: {
+        type: Date,
+        default: Date.now
+    }
 });
 
 export const Recipe = mongoose.model<IRecipe>('Recipe', recipeSchema);

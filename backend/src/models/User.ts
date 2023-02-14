@@ -37,6 +37,10 @@ const userSchema = new Schema({
     // require: true,
     unique: true,
   },
+  userCreated: {
+    type: Date,
+    default: Date.now
+  }
 });
 
 userSchema.pre("save", async function (next) {

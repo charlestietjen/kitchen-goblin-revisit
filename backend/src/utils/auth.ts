@@ -7,7 +7,7 @@ require('dotenv').config();
 const secret = process.env.JWT_SECRET || 'default_secret';
 const expiration = process.env.JWT_EXPIRE || '12h';
 
-interface Req extends Request {
+export interface Req extends Request {
     user: JwtPayload | string;
 }
 
@@ -26,8 +26,9 @@ export function authMiddleware({ req }: { req: Request }) {
     try {
         const data = jwt.verify(token, secret, {maxAge: expiration });
         console.log(data)
-        // i do not remember what the purpose of appending req with data was but Ts hates that and I can't be bothered to work around it.
-        // unless it turns out i did it for a good reason, we'll see
+        // hacky workaround to adding user data to returned req object, revisit
+        const reqAndData = {...req, user: data}
+        return reqAndData;
         // req.user = data;
     } catch {
         console.error('Invalid token');
