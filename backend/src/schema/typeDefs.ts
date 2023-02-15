@@ -48,8 +48,9 @@ type Auth{
 }
 type Query{
     users: [User]
-    recipes: [Recipe]
-    recipebyid(_id:ID!): Recipe
+    user(_id: ID!): User
+    recipes(author: ID): [Recipe]
+    recipe(_id:ID!): Recipe
 }
 type Mutation{
     adduser(displayName: String!, email: String!, password: String!): Auth

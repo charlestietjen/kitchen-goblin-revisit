@@ -14,7 +14,7 @@ const db = require("./config/db");
 
 require("dotenv").config()
 
-interface AuthMiddleware{
+interface AuthMiddleware {
     token?: String,
 }
 
@@ -35,13 +35,15 @@ const startServer = async () => {
 
     app.use(
         '/graphql',
-        cors<cors.CorsRequest>(), 
-        bodyParser.json(), 
+        cors<cors.CorsRequest>(),
+        bodyParser.json(),
         expressMiddleware(server, {
             context: async ({ req }) => authMiddleware({ req })
         }))
+    db.once('open', async () => {
+        await new Promise((resolve: any) => httpServer.listen({ port: PORT }, resolve));
+        console.log(chalk.green(`💀 Server ready at port ${PORT} 💀`))
+    })
 
-    await new Promise((resolve:any) => httpServer.listen({ port: PORT }, resolve));
-    console.log(chalk.green(`💀 Server ready at port ${PORT} 💀`))
 };
 startServer();

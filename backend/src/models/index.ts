@@ -1,2 +1,2 @@
-export { User } from "./User"
-export { Recipe } from "./Recipe"
+export { User, IUser } from "./User"
+export { Recipe, IRecipe } from "./Recipe"
