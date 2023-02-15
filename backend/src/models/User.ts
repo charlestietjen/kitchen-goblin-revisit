@@ -7,35 +7,31 @@ export interface IUser extends Document {
   password: string;
   email: string;
   organization: Types.ObjectId;
+  verified: boolean;
   isCorrectPassword: Function;
 }
 
 const userSchema = new Schema({
   displayName: {
     type: String,
-    require: true,
+    required: true,
   },
   email: {
     type: String,
-    require: true,
+    required: true,
     unique: true,
   },
   password: {
     type: String,
-    require: true,
+    required: true,
   },
   avatarUrl: {
     type: String,
   },
-  status: {
-    type: String,
-    require: true,
-    default: "inactive",
-  },
-  authToken: {
-    type: String,
-    // require: true,
-    unique: true,
+  verified: {
+    type: Boolean,
+    required: true,
+    default: false,
   },
   userCreated: {
     type: Date,
@@ -51,6 +47,16 @@ userSchema.pre("save", async function (next) {
 
   next();
 });
+
+userSchema.pre("findOneAndUpdate", async function (next) {
+  const newPassword = this.get("password")
+  if (newPassword){
+    const saltRounds = 10;
+    this.set("password", await bcrypt.hash(newPassword, saltRounds))
+  }
+  
+  next()
+})
 
 userSchema.methods.isCorrectPassword = async function (password: string) {
   return bcrypt.compare(password, this.password);

@@ -5,7 +5,8 @@ export interface IRecipe extends Document {
     shortDescription: string,
     description: string,
     ingredients: [{ name: string, quantity: number }]
-    directions: [{ title: string, description: string, imageUrl: string }],
+    directions: [{ title: string, description: string, imageUrl: string }]
+    public: boolean
     author: Types.ObjectId
 }
 
@@ -48,6 +49,11 @@ const recipeSchema = new Schema({
     },
     ingredients: [ingredientSchema],
     directions: [directionSchema],
+    public: {
+        type: Boolean,
+        required: true,
+        default: false
+    },
     author: {
         type: Schema.Types.ObjectId,
         required: true

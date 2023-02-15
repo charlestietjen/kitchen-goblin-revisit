@@ -10,20 +10,21 @@ export const resolvers = {
                 .select("-__v -password");
         },
         user: async( _parent: any, { _id }: { _id: Types.ObjectId }) => {
-            return User.findById( _id )
+            return User.findById(_id)
+            .select("-__v");
         },
         recipes: async (_parent: any, { author_id }: { author_id: Types.ObjectId }) => {
             if (author_id) {
                 return Recipe.find((data: IRecipe) => {
                     data.author === author_id
                 })
-                    .select("-__v")
+                    .select("-__v");
             }
-            return Recipe.find()
+            return Recipe.find();
         },
-        recipe: async (_parent: any, { _id }: { _id: string }) => {
+        recipe: async (_parent: any, { _id }: { _id: Types.ObjectId }) => {
             return Recipe.findById(_id)
-                .select("-__v")
+                .select("-__v");
         }
     },
     Mutation: {
@@ -56,6 +57,22 @@ export const resolvers = {
         },
         addrecipe: async (_parent: any, args: any) => {
             const recipe = await Recipe.create(args);
+            return recipe;
+        },
+        edituser: async(_parent: any, args: any) => {
+            // const user = await User.findOneAndUpdate(args._id, args, {new: true, isModified: true})
+            const user = await User.findOneAndUpdate({_id: args._id}, args, {new: true})
+            let token
+            if (user){
+                token = signToken(user)
+            } else {
+                token = " "
+            }
+            return {token, user};
+        },
+        editrecipe: async(_parent: any, args: any) => {
+            const recipe = await Recipe.findOneAndUpdate({_id: args._id}, args, {new: true})
+            
             return recipe;
         }
     }

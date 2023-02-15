@@ -6,7 +6,6 @@ type User{
     displayName: String!
     email: String!
     password: String!
-    authToken: String
     avatarUrl: String
     userCreated: String
 }
@@ -54,7 +53,9 @@ type Query{
 }
 type Mutation{
     adduser(displayName: String!, email: String!, password: String!): Auth
+    edituser(_id: ID!, displayName: String, email: String, password: String): Auth
     login(email: String!, password: String!) :Auth
     addrecipe(name: String!, shortDescription: String!, description: String, ingredients: [IngredientInput], directions: [DirectionInput], author: ID!): Recipe
+    editrecipe(_id: ID!, name: String, shortDescription: String, description: String, ingredients: [IngredientInput], directions: [DirectionInput], author: ID): Recipe
 }
 `
