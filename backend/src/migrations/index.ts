@@ -1,6 +1,6 @@
 const db = require("../config/db");
 import { User } from "../models";
-import usersSeed from "./users";
+import getUsersSeed from "./users";
 import { skullLog } from "../utils/log";
 
 const seedDB = async () => {
@@ -9,9 +9,11 @@ const seedDB = async () => {
 
   skullLog("Removed all Users");
 
-  await User.insertMany(usersSeed);
+  const newUsers = await getUsersSeed();
 
-  skullLog(`Successfully inserted ${usersSeed.length} users`);
+  await User.insertMany(newUsers);
+
+  skullLog(`Successfully inserted ${newUsers.length} users`);
 };
 
 seedDB().then(() => {
